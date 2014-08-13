@@ -1,0 +1,954 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>reveal.js - The HTML Presentation Framework</title>
+
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Hakim El Hattab">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/beige.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+		<script>
+			if( window.location.search.match( /print-pdf/gi ) ) {
+				var link = document.createElement( 'link' );
+				link.rel = 'stylesheet';
+				link.type = 'text/css';
+				link.href = 'css/print/pdf.css';
+				document.getElementsByTagName( 'head' )[0].appendChild( link );
+			}
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+<style>
+.gold { color: gold !important; }
+.green { color: #6f6 !important; }
+.reveal pre { box-shadow: none; }
+.reveal pre code {
+  font-size: 2em;
+  max-height: none;
+  background: black;
+  overflow: visible;
+}
+.reveal pre {
+  max-height: none;
+  line-height: 2.4em;
+  padding: 1em;
+  background: black;
+  overflow: visible;
+}
+img,
+.reveal section img {
+background: white !important;
+border: none;
+}
+</style>
+	</head>
+
+	<body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="reveal">
+<div class="slides">
+<section>
+	<h1>(lojure intro)</h1>
+	<p>
+	 <small>
+	 by <a href="http://github.com/niquola">niquola</a> 
+	 / <a href="http://twitter.com/niquola">@niquola</a>
+	 </small>
+	</p>
+</section>
+
+
+<section>
+<h3> Teamlead of <a href="http://healthsamurai.github.io/">health samurai</a></h3>
+<p> @ waveaccess/choice-hospital-systems</p>
+<p>
+<a href="http://github.com/niquola">github/niquola</a> /
+<a href="http://twitter.com/niquola">twt</a>
+<a href="https://plus.google.com/u/0/+%D0%9D%D0%B8%D0%BA%D0%BE%D0%BB%D0%B0%D0%B9%D0%A0%D1%8B%D0%B6%D0%B8%D0%BA%D0%BE%D0%B2">g+</a>
+<a href="https://www.facebook.com/nicola.ryzhikov">fb</a>
+</p>
+<img src="niquola.jpg"/>
+</section>
+
+<section data-markdown> <script type="text/template">
+## Clojure Russia
+![clojure russia](http://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Clojure-glyph.svg/1024px-Clojure-glyph.svg.png)
+</script> </section>
+
+
+<section data-markdown><script type="text/template">
+## (? clojure)
+
+---
+
+A LISP
+
+for Functional Programming
+
+on JVM
+
+designed for Concurency
+
+by Rich Hickey
+</script></section>
+
+<section data-markdown><script type="text/template">
+## (? clojure history)
+---
+> Work on Clojure began in 1958. 
+> Forty-nine years later (2007) the first version was released.
+</script></section>
+
+<section data-markdown><script type="text/template">
+## LISP
+
+---
+
+> lisp is worth learning for the profound enlightenment experience 
+> you will have when you finally get it; that experience 
+> will make you a better programmer for the rest of your days, 
+> even if you never actually use Lisp itself a lot.
+
+Eric Raymond
+
+</script></section>
+
+
+<section data-markdown><script type="text/template">
+## Syntax in 5sec
+```
+f(a,b) => (f a b)
+
+if(a) { f(b)} => (if a (f b))
+
+```
+</script></section>
+
+<section data-markdown><script type="text/template">
+### SICP
+
+---
+
+* Primitives
+* Composition
+* Abstraction & Extendability
+
+---
+
+code & data
+
+</script></section>
+
+<section data-markdown><script type="text/template">
+### (primitives? :data)
+```clojure
+nil
+"string"
+100.0 ;; number
+:keyword
+symbol
+(this is the list)
+[:this :is :the :vector]
+{:i "am", :the "Map"}
+#{\s \e \t}
+```
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Persistent/Immutable
+---
+
+* list ()
+* vector []
+* hash-map {}
+* set #{}
+
+----
+
+[Chris Okasaki](http://www.amazon.com/Purely-Functional-Structures-Chris-Okasaki/dp/0521663504)
+</script></section>
+
+<section>
+  <h2>Persistent (tries)<h2>
+  <hr/>
+  <img src="persistent-dt.png" style="background: white;"/>
+  <hr/>
+  <p> Path Copying / Structure Sharing </p>
+</section>
+
+<section data-markdown><script type="text/template">
+### (primitives? :code)
+```clojure
+(def symbol init?)
+(if test then else?)
+(do exprs*)
+(let [bindings* ] exprs*)
+(quote form)
+(var symbol)
+(fn name? [params* ] exprs*)
+(loop [bindings* ] exprs*)
+(recur exprs*)
+(throw expr)
+(try expr* catch-clause* finally-clause?)
+```
+</script></section>
+
+<section data-markdown><script type="text/template">
+### (composition? :data)
+
+```clojure
+[{:name "admin" :roles #{:admin}}
+{:name "user"  :roles #{:author}}]
+```
+</script></section>
+
+<section data-markdown><script type="text/template">
+### (composition? :code)
+
+```clojure
+(f (g arg))
+(-> arg f g)
+(->> arg f g)
+```
+</script></section>
+
+
+<section data-markdown>
+<script type="text/template">
+## (abstraction? :data)
+### ADT - abstract data type
+---
+```clojure
+(constructor ...) => tp
+(selector tp) => ...
+(operations tp) => ...
+```
+### separate data & behavior
+</script>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+## (Polimorphism?)
+
+```
+ collection = array
+ collection = set
+
+ collection.add(element)
+```
+</script>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+## (oopish polimorphism)
+----
+![meshok.jpg](meshok.jpg)
+----
+### methods bundled with data
+</script>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+## Expression problem
+---
+
+```
+| type   | op1  | op2  | ? |
+| ------ |:----:| ----:|   |
+| tp1    | x    | x    |   |
+| tp2    | x    | x    |   |
+| tp3    | x    | x    |   |
+-> ?
+```
+---
+
+### add new type
+### add new behavior (interface)
+</script>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+## (protocols)
+
+```clojure
+(defprotocol Speaker
+ (say [this]))
+
+(deftype Rubist [name age city]
+ Speaker
+ (say [this]
+		 (str "Hello i'm ruby")))
+
+(deftype Javoid [name age city]
+ Speaker
+ (say [this]
+		 (str "Hello i'm java")))
+```
+</script>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+## (dynamic dispatch)
+```clojure
+(defmulti encounter
+	(fn [x y]
+		[(:Species x) (:Species y)]))
+
+(defmethod encounter
+ [:Bunny :Lion] [b l]
+ :run-away)
+
+(defmethod encounter
+ [:Bunny :Bunny] [b l]
+ :sex)
+```
+</script>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+## (abstraction? :code)
+---
+## Functional Programming
+</script>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+## First class functions
+---
+### Immutable datatypes & Pure Functions
+---
+### Higher Order Functions
+</script>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+## Functional Programming
+----
+
+#### a more mathematical view
+
+----
+#### functions get values and produce values
+</script>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+## Lambda Calculus
+---
+### abstraction and application
+---
+[An Introduction to Functional Programming Through Lambda Calculus](http://www.amazon.com/Introduction-Functional-Programming-Calculus-Mathematics/dp/0486478831)
+</script>
+</section>
+
+
+<section data-markdown>
+<script type="text/template">
+## (Pure Functions & Immutable Data)
+----
+### referential transparency
+----
+### simple decomposition & reasoning
+----
+### functional core
+</script>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+## (Higher Order Functions)
+----
+### (abstraction? :code)
+</script>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+## (Higher Order Functions)
+----
+```clojure
+(use 'clojure.walk)
+(def thing 
+{:page/tags [{:tag/category "lslsls"}]})
+(postwalk 
+ #(if(keyword? %)
+		(keyword (name %)) %) thing)
+=> {:tags [{:category "lslsls"}]}
+
+```
+---
+[Посетители деревьев Clojure](http://www.ibm.com/developerworks/ru/library/j-treevisit/)
+</script>
+</section>
+
+<section data-markdown><script type="text/template">
+## (reducers/transducers)
+```clojure
+
+(xf reducing-fn) -> reducing-fn
+(defn mapping [f]
+  (fn [f1]
+    (fn [result input]
+      (f1 result (f input)))))
+
+(map fn) => transducer ;; clojure 1.7
+```
+</script></section>
+
+<section data-markdown><script type="text/template">
+## (ring mw)
+```clojure
+(defn mk-mw [h] 
+  (fn [req] 
+      (if pred (h req)))
+
+(-> handler mk-mw (mk-other-mw cfg))
+```
+</script></section>
+
+<section data-markdown>
+<script type="text/template">
+## Essential &  Acidental
+## complexity
+---
+### Shared Mutable State
+#### [Out of the tar pit](http://shaffner.us/cs/papers/tarpit.pdf)
+</script>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+## Value
+-----------
+### a value is something that doesn't change
+</script>
+</section>
+
+
+<section data-markdown>
+<script type="text/template">
+## Identity & Working Models
+-----------
+Models need identity for the same reasons humans need identity
+- to represent the world.
+</script>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+## State
+------
+## Identity & Value changing in time
+</script>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+## State & Identity
+------
+* No way to obtain the state independent of the identity other than copying it.
+* No way to observe a stable state (even to copy it) without blocking others from changing it.
+* No way to associate the identity's state with a different value other than in-place memory mutation.
+</script>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+## Value
+```
+a = 42
+b = a
+a = a + 1
+b = ?
+```
+</script>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+## Reference
+```
+a = [1]
+b = a
+a = concat(a, 1)
+b = ?
+```
+</script>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+## Clojure Programming
+----
+
+Calculate values functionaly
+
+-----
+
+Use Refs & Agents for identity
+
+------
+[clojure docs](http://clojure.org/state)
+</script>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+## (expicite state)
+```clojure
+(def my-atom (atom 0))
+@my-atom
+(swap! my-atom inc)
+```
+</script>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+## Concurency
+
+Immutability makes much of the problem go away
+
+---
+
+Software Transactional Memory & agent systems
+
+---
+do the hard part
+
+</script>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+## (core.async chanels/ioc)
+
+```clojure
+(def ch (chan))
+(go
+ (while true
+	 (let [v (<! ch)]
+		(println "Read: " v))))
+
+(go (>! ch "hi")
+		(<! (timeout 5000))
+		(>! ch "there"))
+```
+</script>
+</section>
+
+
+<section data-markdown>
+<script type="text/template">
+## (more abstraction? & extendability)
+---
+## (meta lang)
+---
+### homoiconicity
+### uniform syntax
+### macros
+</script>
+</section>
+
+<section data-markdown><script type="text/template">
+### (text -> ast -> exec/eval)
+
+```
+a + b*3
+```
+![ast.png](ast.png)
+</script></section>
+
+
+<section data-markdown>
+<script type="text/template">
+### (ast)
+
+```ruby
+[:function, :myfn, [:x, :y],
+ [:+,
+	 [:*, :x, :x],
+	 [:*, :y, :y]]]
+
+[:myfn, 3, 6]
+```
+</script>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+### (ast)
+```
+[function myfn [x y]
+ [+
+	 [* x x]
+	 [* y y]]]
+
+[myfn 3 6]
+```
+</script>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+### (hello lisp)
+
+```clojure
+(defn myfn [x y]
+ (+ (* x x)
+		(* y y)))
+
+(myfn 3 6)
+```
+</script>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+### {[;not(so-much(punctuation));]}
+```
+function myfn(x,y){ //4
+ return x*x + y*y; //2
+}; //2
+
+myfn(3,6); //4
+// sum: 12
+```
+</script>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+## (homoiconicity)
+----
+## (CODE is DATA)
+</script>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+## (uniform)
+
+```clojure
+(class module method statements ...)
+(only s-expression! )
+```
+</script>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+## (nosyntax)
+
+```clojure
+form = (op arg arg)
+arg = form | data
+```
+</script>
+</section>
+
+
+<section data-markdown>
+<script type="text/template">
+## (everething s-expression)
+```clojure
+(built-in-form)
+(function-call args list)
+(macros-call args and forms)
+```
+</script>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+### (most of good staf)
+```clojure
+(defn f-name [args] body)
+(cond (pred1) (expr1)
+		 (pred2) (expr2))
+(for [x xs] body)
+```
+</script>
+</section>
+
+
+<section data-markdown>
+<script type="text/template">
+## (extendable small core)
+---
+## (meta language)
+---
+## (DSL)
+</script>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+## (defmacro)
+```
+(defmacro unless
+ [pred f1 f2]
+ (list 'if (list 'not pred) f1 f2))
+
+(defmacro unless
+ [pred f1 f2]
+ `(if (not (~pred)) f1 f2))
+
+(unless (= 1 2)
+ (print "ok")
+ (print "not"))
+```
+</script>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+## (midje)
+```clojure
+(fact "here desc"
+ (+ 1 2) => 3
+ (conj [1] 2) => (contains 1 2))
+```
+</script>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+## (destructuring & pattern-matching)
+
+```clojure
+(let [[a b] [1 2]
+		 {meth :request-method} req
+		 {:keys [x y] :or {x 0 y 0}} point]
+ ...)
+```
+</script>
+</section>
+
+
+<section data-markdown>
+<script type="text/template">
+## (korma)
+
+```clojure
+(defentity users)
+(select users
+	(where {:active true})
+	(order :created)
+	(limit 5)
+	(offset 3))
+```
+</script>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+## (core.logic)
+
+```clojure
+(run* [q]
+	(fresh [x y]
+		(== [x 2] [1 y])
+		(== q [x y])))
+
+;=> ([1 2])
+```
+</script>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+## (paradigm :as (a library))
+
+```clojure
+(require
+	'[clojure.core.typed :refer [ann]])
+
+(ann  bar [Number -> Number])
+(defn bar [b]
+(+ 2 (foo b)))
+```
+</script>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+## (repl driven dev)
+
+```clojure
+nREPL server started on port 49222
+on host 127.0.0.1
+
+user=> ...
+```
+
+### (dynamism & fp)
+</script>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+## Languages and Platforms
+
+* JVM
+* CLR
+* JSVM
+</script>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+## interop
+```clojure
+(.toUpperCase "fred")
+(System/getProperty "java.vm.version")
+(.. System
+	 (getProperties)
+	 (get "os.name"))
+```
+</script>
+</section>
+
+
+<section>
+<h3><a href="http://www.infoq.com/author/Rich-Hickey">Rich Hickey</a><h3>
+<br/>
+<iframe width="560" height="315" src="//www.youtube.com/embed/-6BsiVyC1kM" frameborder="0" allowfullscreen></iframe>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+## Books
+* [SICP](http://mitpress.mit.edu/sicp/full-text/book/book.html)
+* [SICP in clojure](http://sicpinclojure.com/)
+* [CTM](http://www.amazon.com/Concepts-Techniques-Models-Computer-Programming/dp/0262220695)
+* [Clojure org](http://clojure.org/documentation)
+* [Programming Clojure](http://pragprog.com/book/shcloj/programming-clojure)
+* [Joy Of Clojure](http://joyofclojure.com/)
+* [Papers We Love](https://github.com/papers-we-love/papers-we-love)
+</script>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+## Resources
+
+* [Clojure Russia](https://plus.google.com/communities/114227952963737516047)
+* [Clojure Koans](https://github.com/functional-koans/clojure-koans)
+* [excercism.io](http://exercism.io/)
+* [Cognicast](http://www.cognitect.com/podcast)
+* [Planet of Clojure](http://planet.clojure.in/)
+</script>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+# thx?
+</script>
+</section>
+
+
+
+
+
+
+
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Parallax scrolling
+				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+				// parallaxBackgroundSize: '2100px 900px',
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+<img src="samurai_logo.png" style="width: 50px; box-shadow: 0px 0px 4px #ddd; padding: 4px 8px; border-radius: 15px; position: absolute; top: 30px; right: 30px; background: #222;"/>
+
+	</body>
+</html>
